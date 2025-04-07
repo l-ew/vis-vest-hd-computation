@@ -1,0 +1,11 @@
+[project]
+name = "vis-vest-hd-computation"
+version = "0.1.0"
+description = "Visual-vestibular computation of head direction and reflexive eye movement"
+
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
