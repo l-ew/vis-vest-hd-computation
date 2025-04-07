@@ -5,7 +5,10 @@ import argparse
 import pickle
 import os
 import sys
-config_dir = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir)), '/Users/luke.ewig/Documents/vis-vest-hd-computation/config')
+from pathlib import Path
+here = Path(__file__).resolve()
+
+config_dir = os.path.join(here.parents[2], 'config')
 sys.path.append(config_dir)
 
 from params import *
