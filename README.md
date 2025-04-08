@@ -79,3 +79,5 @@ The following table lists commands and the figures they generate.
 | `python src/main_active.py -t 'active_grating_stim'` | Fig. 5 b, c  |
 
 ## License
+
+Apache License 2.0
