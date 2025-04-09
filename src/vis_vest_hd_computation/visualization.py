@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from scipy import ndimage
 from vis_vest_hd_computation.utils import comp_prop_factor, convert_pvalue_to_asterisks, convert_pvalue_str, normalize_restricted, get_head_trajectory, align_restricted, align_rotations, avg_data, avg_data_per_animal, normalize_rotations
 import matplotlib.markers as mmarkers
+from matplotlib.colors import Normalize
+from matplotlib.ticker import MaxNLocator
 from vis_vest_hd_computation.imports import *
 import itertools
 import cmocean
@@ -1572,10 +1574,19 @@ def plot_vel_dependence_with_regression(df, y='delta_decoded', sm_result=None, c
 
 
 def loss_heatmap(p1, p2, loss, p1fit=None, p2fit=None, p1txt='p1', p2txt='p2', fname='loss_heatmap.pdf', fig_path='.'):
+
+    d1 = 0.5 * (p1[1] - p1[0])
+    d2 = 0.5 * (p2[1] - p2[0])
+    data = np.log(loss).T
+
     fig = plt.figure(figsize=(2.5,1.75))
     ax = fig.add_subplot(111)
-    aspect = p1[-1] / p2[-1]
-    cax = ax.matshow(np.log(loss).T, cmap='inferno_r', aspect=aspect, extent=[p1[0], p1[-1], p2[0], p2[-1]], origin='lower')
+    aspect = (p1[-1] + 2 * d1) / (p2[-1] + 2 * d2)
+
+    cax = ax.matshow(data, cmap='inferno_r', aspect=aspect, origin='lower',
+                     extent=[p1[0] - d1, p1[-1] + d1, p2[0] - d2, p2[-1] + d2],
+                     norm=Normalize(vmin=data.min(), vmax=data.max()))
+    
     ax.set_xlabel(p1txt)
     ax.set_ylabel(p2txt)
     ax.tick_params(axis='x', bottom=True, top=False, labelbottom=True, labeltop=False)
@@ -1585,6 +1596,7 @@ def loss_heatmap(p1, p2, loss, p1fit=None, p2fit=None, p1txt='p1', p2txt='p2', f
 
     colorbar = plt.colorbar(cax)
     colorbar.set_label('log loss')
+    colorbar.ax.yaxis.set_major_locator(MaxNLocator(integer=True))
     plt.subplots_adjust(right=0.8)
 
     plt.tight_layout()
