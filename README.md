@@ -33,7 +33,7 @@ The installation was tested on a MacBook Pro (M2 chip, 16 GB memory, macOS 15.3.
 
 ## Demo
 
-First, the demo data (corresponding to recordings from one wild-type mouse and one FRMD7 mouse) should be downloaded to `vis-vest-hd-computation/data.`
+First, the demo data (corresponding to recordings from one wild-type mouse) should be downloaded to `vis-vest-hd-computation/data.`
 
 Executing
 ```bash
@@ -46,12 +46,6 @@ To analyze the decoded head-direction shift and eye movements in response to vis
 python src/main_passive.py -d -e
 ```
 The script saves results to `vis-vest-hd-computation/data/trial_data` and generates figures in the folder `vis-vest-hd-computation/figures.` In particular, it will create plots of the decoded head-direction shift and the eye turn similar to Fig. 1 j and l as well as Fig. 2 e and f for one example wild-type mouse in the folder `vis-vest-hd-computation/figures/TD0200/all_combinations_dark.` The run time on a MacBook Pro (M2 chip, 16 GB memory) is approximately 3 minutes.
-
-Similarly,
-```bash
-python src/main_passive.py -f -d -e
-```
-analyzes the decoded head-direction shift in response to visual-vestibular stimulation in bright conditions and head rotations in darkness for one example FRMD7 mouse. The script will generate plots similar to Fig. 4 e and f, for the example animal, in the folder `vis-vest-hd-computation/figures/TD0194/all_combinations_dark.`
 
 The command
  `python src/main_active.py -t 'active_grating_stim' -d`

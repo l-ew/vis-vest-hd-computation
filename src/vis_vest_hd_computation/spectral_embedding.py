@@ -1072,18 +1072,13 @@ def main(recording, path='.', eps=0.03, smooth=False, exclude_stages=[], referen
             compare_tuning_curves(bin_centers, latent_tuning_curves, hd_tuning=hd_tuning_curves, path=os.path.join(fig_path, 'tuning_curves_stage={}.pdf'.format(stage_id)))
         else:
             compare_tuning_curves(bin_centers, latent_tuning_curves, hd_tuning=None, path=os.path.join(fig_path, 'tuning_curves_stage={}.pdf'.format(stage_id)))
-        
+
         ordering = tuning_heatmap(latent_tuning_curves, label=DECODED_DIRECTION, path=os.path.join(fig_path, 'latent_tuning_heatmap_stage={}.pdf'.format(stage_id)))
         if hd_tracking:
             tuning_heatmap(hd_tuning_curves, ordering=ordering, label='Head direction', path=os.path.join(fig_path, 'hd_tuning_heatmap_stage={}.pdf'.format(stage_id)))
 
-    if 'eye_pos' in data.keys():
-        eye_pos = data['eye_pos']
-    else:
-        eye_pos = np.array([])
-
-    data = {'deconvolved_act': deconvolved_act, 'calcium_act': calcium_act, 'embedding': embedding, 'latent_state': latent_state, DECODED_DIRECTION: decoded_direction,
-            'time': t, 'hd': hd, 'stage': stage, 'eps': eps, 'deconv_sn': deconv_sn, 'calcium_sn': calcium_sn, 'eye_pos': eye_pos,
+    data = {'deconvolved_act': deconvolved_act, 'calcium_act': calcium_act, 'embedding': embedding, 'latent_state': latent_state,
+            DECODED_DIRECTION: decoded_direction, 'time': t, 'hd': hd, 'stage': stage, 'eps': eps, 'deconv_sn': deconv_sn, 'calcium_sn': calcium_sn,
             'stimulus_start': data['stimulus_start'], 'stimulus_stop': data['stimulus_stop'], 'circ_corr': rho, 'eps_list': eps_list, 'mad_per_eps': mad_per_eps,
             'smooth': smooth, 'exclude_stages': exclude_stages, 'reference_stage': reference_stage, 'calibrate': calibrate, 'orient': orient, 'trim': trim,
             'opt': opt, 'align': align}

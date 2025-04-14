@@ -64,6 +64,18 @@ def _plot_restricted(df, fname, fig_path, large_fig=False, align_rotations=False
 
     ax = sns.lineplot(data=df, x="vel", y=var, hue='stim_type', estimator='mean', clip_on=False, legend='full', err_kws={'alpha': SHADING_ALPHA},
                       errorbar='se', ax=ax1, palette=palette, style=style, markers=markers, dashes=dashes)
+    
+    if aggregate_by == 'animal':
+        n_animals = len(df['animal'].unique())
+        if n_animals > 1:
+            conds = [NATURAL_ROT_LONG, SYNC_ROT_LONG, SCENE_ROT_LONG]
+            colors = [NATURAL_COLOR, SYNC_COLOR, SCENE_COLOR]
+
+            for cond, color in zip(conds, colors):
+                dfc = df[df['stim_type'] == cond]
+
+                sns.lineplot(data=dfc, x="vel", y=var, hue='animal', clip_on=False, alpha=0.25,
+                             errorbar=None, palette=[color], ax=ax1, linewidth=0.5)
 
     vels = np.unique(df['vel'])
 
@@ -1512,8 +1524,8 @@ def cmap_legend(fig_path, label='Head direction', fname="hd_colorbar.pdf", verti
 
 def dark_rotation_comparison(df_dark, style, style_order, markers, y=DECODED_ROTATION, fontsize=SMALL_SIZE, show_legend=True, fname='dark_rotation_comparison.pdf', fig_path='.'):
 
-    fig = plt.figure(figsize=(2.5, 2.0))
-    ax1 = fig.add_axes([0.2, 0.225, 0.75, 0.65])
+    fig = plt.figure(figsize=(4.5, 2.25))
+    ax1 = fig.add_axes([0.2, 0.225, 0.35, 0.7])
 
     ax = sns.lineplot(data=df_dark, x="vel", y=y, estimator='mean', style=style, style_order=style_order,
                       errorbar='se', color=DARK_COLOR, ax=ax1, markers=markers, markeredgewidth=0.5, markeredgecolor='w')
@@ -1521,16 +1533,28 @@ def dark_rotation_comparison(df_dark, style, style_order, markers, y=DECODED_ROT
     vels = np.unique(df_dark['vel'])
     ax.set_xlabel('Peak {} speed [deg/s]'.format(PLATFORM_STR))
     ax.set_ylabel('{} [%]'.format(DECODED_ROTATION.replace('_', ' ')))
-    ax.set_ylim(-5,75)
-    ax.set_yticks([0, 25, 50, 75])
+    # ax.set_ylim(-5,75)
+    # ax.set_yticks([0, 25, 50, 75])
     ax.set_xticks(vels)
     ax.set_xlim(35, 190)
 
+    ax.set_ylim(-35, 85)
+    ax.set_yticks([-25, 0, 25, 50, 75])
+    ax.axhline(0, color='k', linestyle='--', linewidth=1, zorder=-1)
+
     if show_legend:
-        legend = ax.legend(loc='upper left', bbox_to_anchor=(0, 1.225), fontsize=fontsize)
+        legend = ax.legend(loc='upper left', bbox_to_anchor=(0, 1.), fontsize=fontsize)  #bbox_to_anchor=(0, 1.225)
         for handle in legend.legendHandles:
             handle.set_markeredgewidth(0.5)
             handle.set_markeredgecolor('w')
+
+    dfw = df_dark[df_dark['phenotype'] == 'WT']
+    sns.lineplot(data=dfw, x="vel", y=y, hue='animal', clip_on=False, alpha=0.25, linestyle='-',
+                 errorbar=None, palette=[DARK_COLOR], ax=ax1, linewidth=0.5, legend=None)
+
+    dff = df_dark[df_dark['phenotype'] == 'FRMD7']
+    sns.lineplot(data=dff, x="vel", y=y, hue='animal', clip_on=False, alpha=0.25, linestyle='--',
+                 errorbar=None, palette=[DARK_COLOR], ax=ax1, linewidth=0.5, legend=None)
 
     fig.savefig(os.path.join(fig_path, fname), dpi=300)
     plt.close(fig)
