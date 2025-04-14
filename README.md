@@ -14,7 +14,7 @@ conda activate vis-vest-hd-comp
 python -m pip install -e .
 ```
 
-The installation was tested on a MacBook Pro (M2 chip, 16 GB memory, macOS 15.3.2). It should take only a few minutes.
+The installation was tested on a MacBook Pro (M2 chip, 16 GB memory, macOS 15.3.2) and on Windows 11 Enterprise (version 24H2). It should take only a few minutes.
 
 ## Dependencies
 
